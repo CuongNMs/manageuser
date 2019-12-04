@@ -8,18 +8,17 @@ import {View,
 
 interface Props {
     title: string
-    placeholder: string
     secureTextEntry?: boolean
     validate: string
     style: object
 }
 export default class LoginTextInput extends React.Component<Props> {
     render() {
-        const {title, placeholder, secureTextEntry, validate} = this.props
+        const {title, secureTextEntry, validate} = this.props
         return <View style={[this.props.style, styles.container]}>
                         <Text style={styles.title}>{title.toUpperCase()}:</Text>
                         <TextInput style={styles.textInput}
-                            placeholder={placeholder} secureTextEntry={secureTextEntry}
+                            secureTextEntry={secureTextEntry}
                         />
         </View>
     }
@@ -27,22 +26,21 @@ export default class LoginTextInput extends React.Component<Props> {
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        //justifyContent: 'flex-start',
-        //alignItems: 'stretch',
-        marginHorizontal: 10
+        justifyContent: 'flex-end',
+        marginVertical: 10,
+        marginHorizontal: 55,
     },
     title: {
-        textAlign: 'left',
+        textAlign: 'right',
         paddingVertical: 5,
-        //paddingRight: 10
+        marginRight: 10,
+       // backgroundColor: 'red'
     },
     textInput: {
-        flex: 1,
-        marginStart: 25,
-        backgroundColor: 'red',
         borderWidth: 1,
         fontSize: 14,
         paddingVertical: 4,
+        width: 200,
         
     }
     
