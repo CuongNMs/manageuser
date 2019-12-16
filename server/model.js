@@ -26,9 +26,29 @@ module.exports = {
         })
     },
     store: (req, res) => {
-        let data = req.body;
-        let sql = 'INSERT INTO tbl_user SET ?'
-        db.query(sql, [data], (err, response) => {
+        let group_id = req.body.group_id;
+        let login_name = req.body.login_name;
+        let password = req.body.password;
+        let full_name = req.body.full_name;
+        let full_name_kana = req.body.full_name_kana;
+        let email = req.body.email;
+        let tel = req.body.tel;
+        let birthday = req.body.birthday;
+        let rule = req.body.rule;
+        let salt = req.body.salt;
+        // let data=[group_id, login_name, password,full_name, full_name_kana,email, tel, birthday, rule, salt];
+        //let data = req.body;
+        let data= req.body;
+        console.log(data);
+        // let code_level = req.body.detail.code_level;
+        // let start_date = req.body.detail.start_date;
+        // let end_date = req.body.detail.end_date;
+        // let total = parseInt(req.body.detail.total);
+        // let sql1 = 'INSERT INTO `tbl_user` '+
+        // 'SET (`group_id`, `login_name`, `password`, `full_name`, `full_name_kana`, `email`, `tel`, `birthday`, `rule`, `salt`)' +
+        // 'VALUES ('+ group_id +','+login_name+','+password +','+full_name+','+full_name_kana+','+email+','+tel+','+birthday+',' +rule+','+salt+')';
+        let sql1 = 'INSERT INTO tbl_user (group_id,login_name,password,full_name,full_name_kana,email,tel,birthday,rule,salt) VALUES ?'
+        db.query(sql1, data, (err, response) => {
             if (err) throw err
             res.json({message: 'Insert success!'})
         })
