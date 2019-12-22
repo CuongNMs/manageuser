@@ -2,7 +2,9 @@
 module.exports = function(app) {
   let model = require('./model');
 
-  // todoList Routes
+  app.route('/login')
+  .post(model.login);
+
   app.route('/users')
     .get(model.get)
     .post(model.store);

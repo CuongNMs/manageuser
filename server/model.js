@@ -7,12 +7,23 @@ module.exports = {
             'FROM tbl_user AS tu INNER JOIN tbl_detail_user_japan AS tj ' +
             'ON tu.user_id = tj.user_id ' +
             'LEFT JOIN mst_japan AS mj ' +
-            'ON tj.code_level=mj.code_level ' +
+            'ON tj.code_level = mj.code_level ' +
             'LEFT JOIN mst_group AS mg ' +
             'ON tu.group_id = mg.group_id ';
         db.query(selectSql, (err, response) => {
             if (err) throw err
-            res.json(response)
+            res.json(response);
+        })
+    },
+    login: (req, res) => {
+        let loginSql = 'SELECT * FROM tbl_user AS tu WHERE tu.login_name= ? and tu.password= ? and tu.rule = 0';
+        db.query(loginSql, [req.body.login_name, req.body.password], (err, response) => {
+            if (err) throw err
+            if (response[0] != null) {
+                res.json({ message: 'Login success!' })
+            }else{
+                res.json({ message: 'Login failed!' })
+            }
         })
     },
     detail: (req, res) => {
@@ -54,8 +65,6 @@ module.exports = {
             });
             res.json({ message: 'Update success!' })
         })
-
-
     },
     store: (req, res) => {
         let group_id = req.body.group_id;

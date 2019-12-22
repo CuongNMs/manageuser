@@ -1,69 +1,107 @@
 import React from 'react';
-import {View, Image, StyleSheet, TextInput, Text, TouchableHighlight} from 'react-native';
-import LoginTextInput from './LoginTextInput';
-import { NavigationStackProp } from 'react-navigation-stack'
+import {
+    StyleSheet,
+    Text,
+    View,
+    TextInput,
+    TouchableOpacity,
+    AsyncStorage,
+    Alert
+} from 'react-native'
+import { Provider, connect } from 'react-redux'
+import { NavigationStackProp } from 'react-navigation-stack';
+import store from '../redux/store/store'
 
-// interface Props {
-//     navigate?: (screenName: string, params: object)=>void
-// }
-export default class ADM001 extends React.Component<{navigation: NavigationStackProp<{}>}> {
-    constructor(props: any){
-        super(props);
+export class ADM001 extends React.Component<{ navigation: NavigationStackProp<{}> }> {
+    state = {
+        isLogin: true,
+        login_name: '',
+        password: ''
     }
-    render(){
-        const {navigate} = this.props.navigation
-        return <View style = {styles.container}>
-                    <View style={styles.viewCommon}>
-                        <Text style={styles.textLabel}>アカウント名およびパスワードを入力してください</Text>
-                    </View>
-                        <LoginTextInput style={styles.myTextInput} 
-                                title={"アカウント名"} 
-                                validate={"email"} />
 
-                        <LoginTextInput style={styles.myTextInput} 
-                                title={"パスワード"} secureTextEntry 
-                                validate={"email"} />
-                                
-                    <View style={styles.viewCommon}>
-                        <TouchableHighlight style={[styles.button, styles.viewCommon]} onPress={() => {
-                            navigate("ADM002", {
-                                name: "Cuong"
-                            })
-                        }}>
-                            <Text>ログイン</Text>
-                        </TouchableHighlight>
-                    </View>
-        </View>
+    render() {
+        const { navigate } = this.props.navigation
+        return (
+            <View style={styles.container}>
+                <Text style={styles.header}>
+                    LOGIN
+               </Text>
+                <TextInput
+                    style={styles.textInput} placeholder='Username'
+                    onChangeText={(login_name) => this.setState({ login_name })}
+                    underlineColorAndroid='transparent'
+                />
+
+                <TextInput
+                    style={styles.textInput} placeholder='Password'
+                    onChangeText={(password) => this.setState({ password })}
+                    underlineColorAndroid='transparent'
+                />
+
+                <TouchableOpacity style={styles.btn}
+                    onPress={this.login}>
+                    <Text>Login</Text>
+                </TouchableOpacity>
+            </View>
+
+        );
+    }
+
+    login = () => {
+        return fetch('http://localhost:3000/login', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                login_name: this.state.login_name,
+                password: this.state.password
+            })
+        })
+            .then((response) =>{   
+                    return response.json();
+                }
+            )
+            .then((res) => {
+                return {
+                    message: res.message
+                  }
+            })
+            .catch(function (error) {
+                console.log('There has been a problem with your fetch operation: ' + error.message);
+                throw error;
+            });
     }
 }
+
+
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        // alignItems: 'center',
-    },
-    viewCommon: {
-        flexDirection: 'column',
-        justifyContent: 'center',
         alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#2896d3',
+        paddingLeft: 40,
+        paddingRight: 40
     },
-    textLabel: {
-        fontSize: 16,
-        marginVertical: 10,
-        fontWeight: "bold"
+    header: {
+        fontSize: 24,
+        marginBottom: 60,
+        color: '#fff',
+        fontWeight: 'bold'
     },
-    button: {
-        height: 20,
-        width: 100,
-        borderRadius: 5,
-        borderWidth: 1,
-        marginVertical: 10,
-        
+    textInput: {
+        alignSelf: 'stretch',
+        padding: 16,
+        marginBottom: 20,
+        backgroundColor: '#fff'
     },
-    myTextInput: {
-        height: 30,
-        // marginVertical: 10
-    },
-});
+    btn: {
+        alignSelf: 'stretch',
+        backgroundColor: '#01c853',
+        padding: 20,
+        alignItems: 'center'
+    }
+})
