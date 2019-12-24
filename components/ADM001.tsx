@@ -8,11 +8,13 @@ import {
     AsyncStorage,
     Alert
 } from 'react-native'
-import { Provider, connect } from 'react-redux'
+// import { Provider, connect } from 'react-redux'
 import { NavigationStackProp } from 'react-navigation-stack';
-import store from '../redux/store/store'
+import {NavigationStackState} from 'react-navigation-stack';
+// import store from '../redux/store/store'
+import {login} from './login'
 
-export class ADM001 extends React.Component<{ navigation: NavigationStackProp<{}> }> {
+export class ADM001 extends React.Component<{}> {
     state = {
         isLogin: true,
         login_name: '',
@@ -20,7 +22,7 @@ export class ADM001 extends React.Component<{ navigation: NavigationStackProp<{}
     }
 
     render() {
-        const { navigate } = this.props.navigation
+        // const { navigate } = this.props.navigation
         return (
             <View style={styles.container}>
                 <Text style={styles.header}>
@@ -39,7 +41,10 @@ export class ADM001 extends React.Component<{ navigation: NavigationStackProp<{}
                 />
 
                 <TouchableOpacity style={styles.btn}
-                    onPress={this.login}>
+                    onPress={() => {
+                        login(this.state.login_name, this.state.password)
+                        // getUsers()
+                    }}>
                     <Text>Login</Text>
                 </TouchableOpacity>
             </View>
@@ -47,32 +52,7 @@ export class ADM001 extends React.Component<{ navigation: NavigationStackProp<{}
         );
     }
 
-    login = () => {
-        return fetch('http://localhost:3000/login', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                login_name: this.state.login_name,
-                password: this.state.password
-            })
-        })
-            .then((response) =>{   
-                    return response.json();
-                }
-            )
-            .then((res) => {
-                return {
-                    message: res.message
-                  }
-            })
-            .catch(function (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-                throw error;
-            });
-    }
+    
 }
 
 
