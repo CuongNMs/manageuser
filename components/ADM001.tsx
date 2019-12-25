@@ -5,16 +5,12 @@ import {
     View,
     TextInput,
     TouchableOpacity,
-    AsyncStorage,
     Alert
 } from 'react-native'
-// import { Provider, connect } from 'react-redux'
 import { NavigationStackProp } from 'react-navigation-stack';
-import {NavigationStackState} from 'react-navigation-stack';
-// import store from '../redux/store/store'
-import {login} from './login'
+import {login} from './Login'
 
-export class ADM001 extends React.Component<{}> {
+export class ADM001 extends React.Component<{navigation: NavigationStackProp<{}>}> {
     state = {
         isLogin: true,
         login_name: '',
@@ -22,7 +18,7 @@ export class ADM001 extends React.Component<{}> {
     }
 
     render() {
-        // const { navigate } = this.props.navigation
+        const { navigate } = this.props.navigation
         return (
             <View style={styles.container}>
                 <Text style={styles.header}>
@@ -43,7 +39,13 @@ export class ADM001 extends React.Component<{}> {
                 <TouchableOpacity style={styles.btn}
                     onPress={() => {
                         login(this.state.login_name, this.state.password)
-                        // getUsers()
+                        .then((message) => {
+                            if(!message) {
+                                Alert.alert("Sai tên đăng nhập hoặc mật khẩu")
+                            }else{
+                                navigate!("ADM002", {name: "Hoang"})
+                            }
+                        })
                     }}>
                     <Text>Login</Text>
                 </TouchableOpacity>
