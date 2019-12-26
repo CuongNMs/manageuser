@@ -17,11 +17,8 @@ export class ADM002 extends React.Component<{ navigation: NavigationStackProp<{}
     }
     async componentDidMount() {
         try {
-            let response = await getUsers();
-            if (response.length > 0) {
-                this.setState({ users: response })
-                console.log(this.state.users)
-            }
+            let arrayUser = await getUsers();
+            this.setState({users: arrayUser})
         } catch (error) {
             console.error(error);
         }
@@ -34,21 +31,33 @@ export class ADM002 extends React.Component<{ navigation: NavigationStackProp<{}
                     ADM002
                </Text>
 
-                <FlatList data={this.state.users}
-                    renderItem={this._FlatListItem}
-                >
-                </FlatList>
+                <FlatList 
+                data={this.state.users}
+                renderItem={({item})=>
+                    <Item login_name = {item}></Item>
+                }
+                />
+               
             </View>
         )
     }
 
-    _FlatListItem = (item: any) => (
-        <View>
-            <Text style={styles.flatListItem}>{item.login_name}</Text>
-        </View>
+    
+       
         
-    )
+    
 }
+
+function Item({ login_name }: {login_name:string}){
+    return (
+        <View>
+            <Text>
+                {login_name}
+            </Text>
+        </View>
+    );
+}
+
 type UserProps = {
     login_name: string
 }

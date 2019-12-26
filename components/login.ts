@@ -21,3 +21,4 @@ export const login = async (login_name: string, password: string) => {
         console.error(error);
     }
 }
+        
