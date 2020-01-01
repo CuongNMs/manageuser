@@ -18,83 +18,86 @@ export class ADM002 extends React.Component<{ navigation: NavigationStackProp<{}
     async componentDidMount() {
         try {
             let arrayUser = await getUsers();
-            this.setState({users: arrayUser})
+            this.setState({ users: arrayUser })
         } catch (error) {
             console.error(error);
         }
     }
 
     render() {
+        const {navigation} = this.props
         return (
-            <View>
+            <View style={styles.container} >
                 <Text>
                     ADM002
                </Text>
 
-                <FlatList 
-                data={this.state.users}
-                renderItem={({item})=>
-                    <Item login_name = {item}></Item>
-                }
+                <FlatList
+                    data={this.state.users}
+                    renderItem={({ item }) =>
+                        <Item login_name={item.login_name}
+                        navigation = {navigation}
+                        ></Item>
+                    }
+                    keyExtractor={item => item.user_id.toString()}
                 />
-               
+
             </View>
         )
     }
 
-    
-       
-        
-    
+
+
+
+
 }
 
-function Item({ login_name }: {login_name:string}){
+function Item({ login_name, navigation }: { login_name: string, navigation: NavigationStackProp<{}>}) {
     return (
-        <View>
-            <Text>
-                {login_name}
-            </Text>
-        </View>
+        <TouchableOpacity onPress={(event) => {
+            navigation.navigate("ADM003", 
+                {login_name})
+        }}>
+            <View style={styles.item}>
+                <Text style={styles.title}>
+                    {login_name}
+                </Text>
+            </View>
+        </TouchableOpacity>
     );
 }
 
-type UserProps = {
-    login_name: string
-}
 
+// type UserItemProps = {
+//     user_id:string;
+//     login_name: string;
+//     index: number;
+//     navigate: (screenName: string, params: object) =>void
+// }
+// const _Item:React.FC<UserItemProps> = (props) =>{
 
+//     const {login_name, index, navigate} = props
+//     return (
+//         <TouchableOpacity onPress = {(event) =>{
+//             navigate("ADM003", {login_name, index})
+//         }}>
+            
+//         </TouchableOpacity>
+//     );
+// }
 
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#2896d3',
-        paddingLeft: 40,
-        paddingRight: 40
     },
-    header: {
-        fontSize: 24,
-        marginBottom: 60,
-        color: '#fff',
-        fontWeight: 'bold'
-    },
-    textInput: {
-        alignSelf: 'stretch',
-        padding: 16,
-        marginBottom: 20,
-        backgroundColor: '#fff'
-    },
-    btn: {
-        alignSelf: 'stretch',
-        backgroundColor: '#01c853',
+    item: {
+        backgroundColor: '#f9c2ff',
         padding: 20,
-        alignItems: 'center'
+        marginVertical: 8,
+        marginHorizontal: 16,
     },
-    flatListItem: {
-        color: 'white',
-        padding: 10,
-        fontSize: 16
-    }
-})
+    title: {
+        fontSize: 20,
+    },
+});
