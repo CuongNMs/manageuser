@@ -3,7 +3,7 @@ const db = require('./db')
 
 module.exports = {
     get: (req, res) => {
-        let selectSql = 'SELECT tu.user_id, tu.group_id, tu.login_name, tu.password, tu.full_name, tu.full_name_kana, tu.email, tu.tel, tu.birthday, tj.code_level, tj.start_date, tj.end_date, tj.total ' +
+        let selectSql = 'SELECT tu.user_id, tu.group_id, mg.group_name, tu.login_name, tu.password, tu.full_name, tu.full_name_kana, tu.email, tu.tel, tu.birthday, tj.code_level, mj.name_level, tj.start_date, tj.end_date, tj.total ' +
             'FROM tbl_user AS tu INNER JOIN tbl_detail_user_japan AS tj ' +
             'ON tu.user_id = tj.user_id ' +
             'LEFT JOIN mst_japan AS mj ' +
@@ -27,7 +27,7 @@ module.exports = {
         })
     },
     detail: (req, res) => {
-        let selectDetailSql = 'SELECT tu.user_id, tu.group_id, tu.login_name, tu.password, tu.full_name, tu.full_name_kana, tu.email, tu.tel, tu.birthday, tj.code_level, tj.start_date, tj.end_date, tj.total ' +
+        let selectDetailSql = 'SELECT tu.user_id, tu.group_id, mg.group_name, tu.login_name, tu.password, tu.full_name, tu.full_name_kana, tu.email, tu.tel, tu.birthday, tj.code_level, mj.code_name, tj.start_date, tj.end_date, tj.total ' +
             'FROM tbl_user AS tu INNER JOIN tbl_detail_user_japan AS tj ' +
             'ON tu.user_id = tj.user_id ' +
             'LEFT JOIN mst_japan AS mj ' +

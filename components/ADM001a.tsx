@@ -10,13 +10,9 @@ import {
 import { NavigationStackProp } from 'react-navigation-stack';
 import {login} from './Login'
 
-
-interface LoginProps {
-    navigation: NavigationStackProp<{}>
-}
-
-export class ADM001 extends React.Component<LoginProps> {
+export class ADM001 extends React.Component<{navigation: NavigationStackProp<{}>}> {
     state = {
+        isLogin: true,
         login_name: '',
         password: ''
     }
@@ -47,7 +43,7 @@ export class ADM001 extends React.Component<LoginProps> {
                             if(!message) {
                                 Alert.alert("Sai tên đăng nhập hoặc mật khẩu")
                             }else{
-                                navigate("ADM002")
+                                navigate!("ADM002", {name: "Hoang"})
                             }
                         })
                     }}>

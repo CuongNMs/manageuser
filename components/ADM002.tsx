@@ -7,11 +7,17 @@ import {
     TextInput,
     TouchableOpacity,
     AsyncStorage,
+    Image,
     Alert
 } from 'react-native'
 import { NavigationStackProp } from 'react-navigation-stack';
 import { getUsers } from './GetUser';
-export class ADM002 extends React.Component<{ navigation: NavigationStackProp<{}> }>{
+
+type ProductListProps = {
+    navigation: NavigationStackProp<{}>;
+};
+
+export class ADM002 extends React.Component<ProductListProps>{
     state = {
         users: []
     }
@@ -34,70 +40,106 @@ export class ADM002 extends React.Component<{ navigation: NavigationStackProp<{}
 
                 <FlatList
                     data={this.state.users}
-                    renderItem={({ item }) =>
-                        <Item login_name={item.login_name}
-                        navigation = {navigation}
-                        ></Item>
+                    renderItem={({ item, index }) =>
+                        <UserItem  full_name = {item.full_name}
+                        index ={index}
+                        {...item} {...navigation}
+                        ></UserItem>
                     }
-                    keyExtractor={item => item.user_id.toString()}
+                    keyExtractor={(user) =>  user.user_id.toString()
+                    }
                 />
 
             </View>
         )
     }
 
-
-
-
-
 }
 
-function Item({ login_name, navigation }: { login_name: string, navigation: NavigationStackProp<{}>}) {
-    return (
+type UserItemProps = {
+    user_id:string
+    login_name: string
+    full_name: string
+    full_name_kana: string
+    birthday: string
+    email: string
+    tel: string
+    name_level: string
+    start_date: string
+    end_date: string
+    index:number
+    navigate: (screenName: string, params: object)=>void
+}
+
+const UserItem:React.FC<UserItemProps> = (props) => {
+    const {user_id, login_name,full_name,full_name_kana,birthday,email,tel,name_level,start_date,end_date, index, navigate} = props
+    return (        
         <TouchableOpacity onPress={(event) => {
-            navigation.navigate("ADM003", 
-                {login_name})
+
+            navigate("ADM003", 
+                {user_id, login_name, full_name, full_name_kana, birthday, email,tel,name_level,start_date,end_date})
         }}>
-            <View style={styles.item}>
-                <Text style={styles.title}>
-                    {login_name}
-                </Text>
+            <View style={[styles.productItem,
+            index % 2 == 0 ? styles.productItemGray : styles.productItemYellow]}>
+                <View style={styles.rightView}>
+                    <Text style={styles.boldText}>{full_name}</Text>
+                </View>
             </View>
-        </TouchableOpacity>
-    );
+        </TouchableOpacity>)
 }
 
 
-// type UserItemProps = {
-//     user_id:string;
-//     login_name: string;
-//     index: number;
-//     navigate: (screenName: string, params: object) =>void
-// }
-// const _Item:React.FC<UserItemProps> = (props) =>{
+// const UserItem:React.FC<UserItemProps> = (props) => {
+//     const {user_id, login_name,full_name,full_name_kana,birthday,email,tel,name_level,start_date,end_date, index, navigate} = props
+//     return (        
+//         <TouchableOpacity onPress={(event) => {
 
-//     const {login_name, index, navigate} = props
-//     return (
-//         <TouchableOpacity onPress = {(event) =>{
-//             navigate("ADM003", {login_name, index})
+//             navigate("ADM003", 
+//                 {user_id, login_name, full_name, full_name_kana, birthday, email,tel,name_level,start_date,end_date})
 //         }}>
-            
-//         </TouchableOpacity>
-//     );
+//             <View style={[styles.productItem,
+//             index % 2 == 0 ? styles.productItemGray : styles.productItemYellow]}>
+//                 <View style={styles.rightView}>
+//                     <Text style={styles.boldText}>{full_name}</Text>
+//                 </View>
+//             </View>
+//         </TouchableOpacity>)
 // }
+
 
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-    item: {
-        backgroundColor: '#f9c2ff',
-        padding: 20,
-        marginVertical: 8,
-        marginHorizontal: 16,
+    productItem: {
+        height: 100,
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center'
     },
-    title: {
-        fontSize: 20,
+    productImage: {
+        width: 60,
+        height: 60,
+        borderRadius: 30
     },
-});
+    rightView: {
+        paddingHorizontal: 10,
+        flexDirection: 'column',
+        justifyContent: 'space-around'
+    },
+    productItemYellow: {
+        backgroundColor: 'yellow'
+    }, 
+    boldText: {
+        fontWeight: 'bold',
+        fontSize: 14,
+        marginBottom: 10
+    },
+    lightText: {
+        fontSize: 14,
+    },
+    productItemGray: {
+        backgroundColor: 'grey'
+    }
+})
